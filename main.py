@@ -6,8 +6,9 @@ from tkinter import messagebox
 
 file = open ("highest.csv","r")
 highest=file.readline()
+print(highest)
 highest_name=highest.split(",")[1]
-highest_score=highest.split(",")[0]
+highest_score=int(highest.split(",")[0])
 
 def open_game():
     player_name = name_entry.get()
@@ -131,17 +132,9 @@ def start_game(player_name):
             update_sequence()
 
     def save_highest_score(score, player_name):
-        with open('highest.csv', 'w', newline='') as file:
-            writer = csv.writer(file, quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            writer.writerow([score, player_name])
-
-    try:
-        with open('highest.csv', 'r') as file:
-            reader = csv.reader(file)
-            # highest_score, highest_player = map(str, next(reader))
-            highest_score = int(highest_score)
-    except FileNotFoundError:
-        highest_score, highest_player = 0, "None"
+        with open('highest.csv', 'a',newline="") as file:
+            file.write(f"{score},{player_name}")
+            # writer.writerow([score, player_name])
     
     sequence = []
     sequence_index = 0
