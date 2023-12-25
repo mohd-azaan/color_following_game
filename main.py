@@ -9,7 +9,7 @@ def open_game():
 
 def start_game(player_name):
     root = CTk()
-    root.geometry("500x500")
+    root.geometry("600x600")
     root.title("Color-Following-Game")
 
     def button_clicked(direction):
@@ -141,7 +141,7 @@ name_label.place(relx=0.3, rely=0.3, anchor="center")
 name_entry = CTkEntry(home)
 name_entry.place(relx=0.7, rely=0.3, anchor="center")
 
-start_button = CTkButton(home, text="Start", width=10, height=2, command=open_game)
+start_button = CTkButton(home, text="Start", command=open_game)
 start_button.place(relx=0.5, rely=0.6, anchor="center")
 
 home.mainloop()
