@@ -2,6 +2,7 @@ from customtkinter import *
 import random
 import csv
 import time
+from tkinter import messagebox
 
 file = open ("highest.csv","r")
 highest=file.readline()
@@ -22,7 +23,8 @@ def start_game(player_name):
     highest_score_label.pack()
     current_score_label=CTkLabel(root,text=f"Current Score : {player_name} {0}")
     current_score_label.pack()
-    root.geometry("600x600")
+    root.geometry("640x640")
+    root.resizable(False,False)
     root.title("Color-Following-Game")
 
     def button_clicked(direction):
@@ -43,7 +45,7 @@ def start_game(player_name):
             print("Incorrect sequence! Game over.")
             save_highest_score(highest_score, highest_name)
             root.destroy()
-            rematch_prompt(player_name)
+            rematch_prompt()
 
         if sequence_index == len(sequence):
             update_sequence()
@@ -74,7 +76,9 @@ def start_game(player_name):
         root.update()
         time.sleep(1)
         countdown_label.destroy()
-        
+        root.update()
+        time.sleep(1)
+
         for direction in sequence:
             if direction == "Top":
                 top_button.configure(fg_color="#FFFFFF")  # Change to white
@@ -119,26 +123,12 @@ def start_game(player_name):
         right_button.configure(state="normal")
         
 
-    def rematch_prompt(player_name):
-        rematch_window = CTk()
-        rematch_window.geometry("300x100")
-        rematch_window.title("Rematch")
-        rematch_label = CTkLabel(rematch_window, text="Do you want to play again?")
-        rematch_label.pack()
-
-        def play_again():
-            rematch_window.destroy()
-            start_game(player_name)
-
-        def end_game():
-            save_highest_score(highest_score, highest_name)
-            rematch_window.destroy()
-
-        rematch_yes_button = CTkButton(rematch_window, text="Yes", width=8, height=1, command=play_again)
-        rematch_yes_button.pack(side="left")
-
-        rematch_no_button = CTkButton(rematch_window, text="No", width=8, height=1, command=end_game)
-        rematch_no_button.pack(side="right")
+    def rematch_prompt():
+        nonlocal score
+        rematch = messagebox.askyesno("Rematch", "Do you want to play again?")
+        if rematch:
+            score = 0
+            update_sequence()
 
     def save_highest_score(score, player_name):
         with open('highest.csv', 'w', newline='') as file:
@@ -148,7 +138,7 @@ def start_game(player_name):
     try:
         with open('highest.csv', 'r') as file:
             reader = csv.reader(file)
-            highest_score, highest_player = map(str, next(reader))
+            # highest_score, highest_player = map(str, next(reader))
             highest_score = int(highest_score)
     except FileNotFoundError:
         highest_score, highest_player = 0, "None"
@@ -183,17 +173,18 @@ def start_game(player_name):
 home = CTk()
 highest_score_label=CTkLabel(home,text=f"Highest Score : {highest_score} by {highest_name} ")
 highest_score_label.pack(pady=10)
-home.geometry("300x200")
+home.geometry("300x300")
+home.resizable(False,False)
 home.title("Color-Following-Game - Home")
 
-name_label = CTkLabel(home, text="Enter Your Name : ")
+name_label = CTkLabel(home, text="Enter Your Name :   ")
 name_label.place(relx=0.3, rely=0.3, anchor="center")
 
 name_entry = CTkEntry(home)
 name_entry.place(relx=0.7, rely=0.3, anchor="center")
 
 start_button = CTkButton(home, text="Start", command=open_game)
-start_button.place(relx=0.5, rely=0.6, anchor="center")
+start_button.place(relx=0.5, rely=0.5, anchor="center")
 
 home.mainloop()
 
