@@ -4,6 +4,8 @@ import csv
 import time
 from tkinter import messagebox
 
+label_font = ("Arial", 20) 
+
 file = open ("highest.csv","r")
 highest=file.readlines()
 n=len(highest)-1
@@ -13,7 +15,7 @@ highest_score=int(highest[n].split(",")[0])
 # print(highest_name)
 # print(highest_score)
 def open_game():
-    player_name = name_entry.get()
+    player_name = name_entry.get().title()
     home.destroy()  
     start_game(player_name)
 
@@ -22,11 +24,11 @@ def start_game(player_name):
 
     root = CTk()
 
-    highest_score_label=CTkLabel(root,text=f"Highest Score : {highest_score} by {highest_name} ")
-    highest_score_label.pack()
-    current_score_label=CTkLabel(root,text=f"Current Score : {player_name} {0}")
-    current_score_label.pack()
-    root.geometry("640x640")
+    highest_score_label = CTkLabel(root, text=f"High Score: {highest_score} by {highest_name}", font=label_font)
+    highest_score_label.pack(side="top",padx=8, pady=10, anchor="ne")
+    current_score_label = CTkLabel(root, text=f"Current Score: {player_name} {0}", font=("Arial", 20))
+    current_score_label.pack(side="top",padx=8, pady=(0, 20), anchor="nw")
+    root.geometry("640x640+300+130")
     root.resizable(False,False)
     root.title("Color-Following-Game")
 
@@ -134,8 +136,8 @@ def start_game(player_name):
             update_sequence()
 
     def save_highest_score(score, player_name):
-        with open('highest.csv', 'a',newline="") as file:
-            file.write(f"{score},{player_name}")
+        with open('highest.csv', 'a') as file:
+            file.write(f"{score},{player_name}\n")
             # writer.writerow([score, player_name])
     
     sequence = []
@@ -164,15 +166,14 @@ def start_game(player_name):
 
     update_sequence()
     root.mainloop()
-
 home = CTk()
-highest_score_label=CTkLabel(home,text=f"Highest Score : {highest_score} by {highest_name} ")
+highest_score_label=CTkLabel(home,text=f"Highest Score : {highest_score} by {highest_name} ",font=("Arial", 16) )
 highest_score_label.pack(pady=10)
-home.geometry("300x300")
+home.geometry("350x300+300+130")
 home.resizable(False,False)
 home.title("Color-Following-Game - Home")
 
-name_label = CTkLabel(home, text="Enter Your Name :   ")
+name_label = CTkLabel(home, text="Enter Your Name :   ",font=("Arial", 16) )
 name_label.place(relx=0.3, rely=0.3, anchor="center")
 
 name_entry = CTkEntry(home)
