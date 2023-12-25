@@ -186,7 +186,7 @@ highest_score_label.pack(pady=10)
 home.geometry("300x200")
 home.title("Color-Following-Game - Home")
 
-name_label = CTkLabel(home, text="Enter Your Name:")
+name_label = CTkLabel(home, text="Enter Your Name : ")
 name_label.place(relx=0.3, rely=0.3, anchor="center")
 
 name_entry = CTkEntry(home)
