@@ -145,3 +145,4 @@ start_button = CTkButton(home, text="Start", width=10, height=2, command=open_ga
 start_button.place(relx=0.5, rely=0.6, anchor="center")
 
 home.mainloop()
+
