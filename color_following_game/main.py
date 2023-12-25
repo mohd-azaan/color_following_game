@@ -12,8 +12,6 @@ def start_game(player_name):
     root.geometry("500x500")
     root.title("Color-Following-Game")
 
-    
-
     def button_clicked(direction):
         print(f"Button {direction} clicked.")
         check_sequence(direction)
@@ -41,7 +39,7 @@ def start_game(player_name):
         sequence_index = 0
         print("New sequence:", sequence)
         show_sequence()
-        guess_label.configure(text="Now you can start guessing!")
+        # guess_label.configure(text="Now you can start guessing!")
 
     def show_sequence():
         nonlocal sequence
