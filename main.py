@@ -10,7 +10,7 @@ highest_score=highest.split(",")[0]
 
 def open_game():
     player_name = name_entry.get()
-    home.destroy()  # Close the home window
+    home.destroy()  
     start_game(player_name)
 
 def start_game(player_name):
@@ -41,7 +41,7 @@ def start_game(player_name):
                 highest_name = player_name
         else:
             print("Incorrect sequence! Game over.")
-            save_highest_score(highest_score,   highest_name)
+            save_highest_score(highest_score, highest_name)
             root.destroy()
             rematch_prompt(player_name)
 
@@ -54,7 +54,6 @@ def start_game(player_name):
         sequence_index = 0
         print("New sequence:", sequence)
         show_sequence()
-        root.after(2000, lambda: None)  # 2-second delay after updating the sequence
 
     def show_sequence():
         nonlocal sequence
@@ -105,7 +104,6 @@ def start_game(player_name):
                 right_button.configure(fg_color="#4CB9E7")  # Revert to blue
                 root.update()
                 root.after(500)  # Delay between button flashes
-        # Enable buttons during sequence display
 
         # After showing the sequence
         countdown_label = CTkLabel(root, text="Your turn", font=("Arial", 40))
@@ -113,7 +111,8 @@ def start_game(player_name):
         root.update()
         time.sleep(1)
         countdown_label.destroy()
-        
+
+        # Enable buttons after sequence display
         top_button.configure(state="normal")
         left_button.configure(state="normal")
         bottom_button.configure(state="normal")
@@ -161,22 +160,22 @@ def start_game(player_name):
     top_button = CTkButton(root, text="", width=150, height=150, fg_color="#65B741", corner_radius=100,
                        hover_color="#458230", command=lambda: button_clicked("Top"))
     top_button.place(relx=0.5, rely=0.1, anchor="n")
-    top_button.configure(state="disabled")  # Initially disable the buttons
+    top_button.configure(state="disabled")  
 
     left_button = CTkButton(root, text="", width=150, height=150, fg_color="#BF3131", corner_radius=100,
                             hover_color="#8C1F1F", command=lambda: button_clicked("Left"))
     left_button.place(relx=0.1, rely=0.5, anchor="w")
-    left_button.configure(state="disabled")  # Initially disable the buttons
+    left_button.configure(state="disabled")  
 
     bottom_button = CTkButton(root, text="", width=150, height=150, fg_color="#FFFB73", corner_radius=100,
                             hover_color="#CCC64C", command=lambda: button_clicked("Bottom"))
     bottom_button.place(relx=0.5, rely=0.9, anchor="s")
-    bottom_button.configure(state="disabled")  # Initially disable the buttons
+    bottom_button.configure(state="disabled")  
 
     right_button = CTkButton(root, text="", width=150, height=150, fg_color="#4CB9E7", corner_radius=100,
                             hover_color="#3384A5", command=lambda: button_clicked("Right"))
     right_button.place(relx=0.9, rely=0.5, anchor="e")
-    right_button.configure(state="disabled")  # Initially disable the buttons
+    right_button.configure(state="disabled")  
 
     update_sequence()
     root.mainloop()
