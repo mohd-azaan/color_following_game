@@ -50,7 +50,7 @@ def start_game(player_name):
             print("Incorrect sequence! Game over.")
             save_highest_score(highest_score, highest_name)
             root.destroy()
-            rematch_prompt()
+            game_over()
 
         if sequence_index == len(sequence):
             update_sequence()
@@ -128,16 +128,17 @@ def start_game(player_name):
         right_button.configure(state="normal")
         
 
-    def rematch_prompt():
-        nonlocal score
-        rematch = messagebox.askyesno("Rematch", "Do you want to play again?")
-        if rematch:
-            score = 0
-            update_sequence()
+    def game_over():
+        game_over_root = CTk()
+        game_over_root.geometry("640x640+300+130")
+        game_over_root.resizable(False,False)
+        game_over_label = CTkLabel(game_over_root, text="Game Over!", font=("Arial", 40))
+        game_over_label.pack(expand=True, fill="both")
+        game_over_root.mainloop()
 
     def save_highest_score(score, player_name):
-        with open('highest.csv', 'a') as file:
-            file.write(f"{score},{player_name}\n")
+        with open('highest.csv', 'w') as file:
+            file.write(f"{score},{player_name}")
             # writer.writerow([score, player_name])
     
     sequence = []
