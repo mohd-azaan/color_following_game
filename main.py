@@ -69,8 +69,7 @@ def main():
         highest_name=highest[n].split(",")[1].strip()
         highest_score=int(highest[n].split(",")[0])
         file.close()
-
-
+        
         root = CTk()
 
         highest_score_label = CTkLabel(root, text=f"High Score : {highest_score} by {highest_name}", font=label_font)
@@ -84,8 +83,7 @@ def main():
         root.resizable(False,False)
         root.title("Color-Following-Game")
         
-        # XXX 
-        
+
         def button_clicked(direction):
             check_sequence(direction)
             
