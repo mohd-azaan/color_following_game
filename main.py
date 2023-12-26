@@ -23,17 +23,23 @@ def main():
 
 
     def open_game():
-        player_name = name_entry.get().title()
-        if player_name == "":
-            pass
-        difficulty = difficulty_comboBox.get()  # Get the selected difficulty level
-        home.destroy()
-        start_game(player_name, difficulty)
+        def start_game_after_validation():
+            player_name = name_entry.get().title()
+            if player_name == "":
+                invalid_name_label = CTkLabel(home, text="Please enter a name!", text_color="red",fg_color="transparent")
+                invalid_name_label.place(relx=0.52, rely=0.52)
+            else:
+                difficulty = difficulty_comboBox.get()  # Get the selected difficulty level
+                home.destroy()
+                start_game(player_name, difficulty)
+
+        start_game_after_validation()
+
 
 
     def start_game(player_name,difficulty):
         nonlocal highest_name,highest_score,n
-        print(n)
+        # print(n)
         delay_bt_flash=0
         delay_of_flash=0
         if difficulty == "Easy":
@@ -63,6 +69,8 @@ def main():
         highest_name=highest[n].split(",")[1].strip()
         highest_score=int(highest[n].split(",")[0])
         file.close()
+
+
         root = CTk()
 
         highest_score_label = CTkLabel(root, text=f"High Score : {highest_score} by {highest_name}", font=label_font)
@@ -261,9 +269,9 @@ def main():
     home.title("Color-Following-Game - Home")
 
     name_label = CTkLabel(home, text="Enter Your Name :   ",font=("Arial", 16) )
-    name_label.place(relx=0.1, rely=0.5 )
+    name_label.place(relx=0.1, rely=0.44 )
     name_entry = CTkComboBox(home,values=[highest_name_extreme,highest_name_hard,highest_name_medium,highest_name_easy])
-    name_entry.place(relx=0.5, rely=0.5)
+    name_entry.place(relx=0.5, rely=0.44)
     name_entry.set("")
 
     difficulty_label = CTkLabel(home, text="Choose difficulty  :   ",font=("Arial", 16) )
