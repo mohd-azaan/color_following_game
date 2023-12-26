@@ -1,19 +1,15 @@
 from customtkinter import *
 import random
-import csv
 import time
-from tkinter import messagebox
 
 label_font = ("Arial", 20) 
 
 file = open ("highest.csv","r")
 highest=file.readlines()
 n=len(highest)-1
-# print(highest)
 highest_name=highest[n].split(",")[1].strip()
 highest_score=int(highest[n].split(",")[0])
-# print(highest_name)
-# print(highest_score)
+
 def open_game():
     player_name = name_entry.get().title()
     home.destroy()  
