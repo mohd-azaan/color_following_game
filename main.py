@@ -7,6 +7,7 @@ label_font = ("Arial", 20)
 def main():
     file = open ("highest.csv","r")
     highest=file.readlines()
+    file.close()
     n=len(highest)-1
     highest_name_easy=highest[0].split(",")[1].strip()
     highest_score_easy=int(highest[0].split(",")[0])
@@ -43,9 +44,11 @@ def main():
             delay_bt_flash=100
             delay_of_flash=350
             n=2
+        file= open("highest.csv","r")
+        highest=file.readlines()
         highest_name=highest[n].split(",")[1].strip()
         highest_score=int(highest[n].split(",")[0])
-        
+        file.close()
         root = CTk()
 
         highest_score_label = CTkLabel(root, text=f"High Score : {highest_score} by {highest_name}", font=label_font)
@@ -153,7 +156,7 @@ def main():
 
             # After showing the sequence
             countdown_label = CTkLabel(root, text="Your turn", font=("Arial", 40))
-            countdown_label.place(relx=0.5, rely=0.5, anchor="center")
+            countdown_label.place(relx=0.5, rely=0.58, anchor="center")
             root.update()
             time.sleep(1)
             countdown_label.destroy()
@@ -188,11 +191,15 @@ def main():
         def play_again(game_over_root,player_name):
             game_over_root.destroy()
             start_game(player_name,difficulty)
-        
+
         def save_highest_score(score, player_name):
             with open('highest.csv', 'w') as file:
-                file.write(f"{score},{player_name},{difficulty}")
-                # writer.writerow([score, player_name])
+                for i,line in enumerate(highest):
+                    if i == n :
+                        file.write(f"{score},{player_name},{difficulty}\n")
+                    else :
+                        file.write(line)
+                
         
         sequence = []
         sequence_index = 0
