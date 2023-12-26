@@ -24,6 +24,8 @@ def main():
 
     def open_game():
         player_name = name_entry.get().title()
+        if player_name == "":
+            pass
         difficulty = difficulty_comboBox.get()  # Get the selected difficulty level
         home.destroy()
         start_game(player_name, difficulty)
