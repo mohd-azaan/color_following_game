@@ -48,10 +48,13 @@ def main():
         
         root = CTk()
 
-        highest_score_label = CTkLabel(root, text=f"High Score: {highest_score} by {highest_name}", font=label_font)
+        highest_score_label = CTkLabel(root, text=f"High Score : {highest_score} by {highest_name}", font=label_font)
         highest_score_label.pack(side="top",padx=8, pady=10, anchor="ne")
         current_score_label = CTkLabel(root, text=f"Current Score: {player_name} {0}", font=("Arial", 20))
-        current_score_label.place(rely=0.017,relx=0.02)
+        current_score_label.place(rely=0.09,relx=0.02)
+        
+        current_mode_label = CTkLabel(root, text=f"Mode : {difficulty} ", font=("Arial", 20))
+        current_mode_label.place(rely=0.017,relx=0.02)
         root.geometry("640x640+300+130")
         root.resizable(False,False)
         root.title("Color-Following-Game")
@@ -105,7 +108,7 @@ def main():
             right_button.configure(state="disabled")
 
             countdown_label = CTkLabel(root, text="2", font=("Arial", 40))
-            countdown_label.place(relx=0.5, rely=0.5, anchor="center")
+            countdown_label.place(relx=0.5, rely=0.58, anchor="center")
             root.update()
             time.sleep(1)
             countdown_label.configure(text="1")
@@ -184,7 +187,7 @@ def main():
             main()
         def play_again(game_over_root,player_name):
             game_over_root.destroy()
-            start_game(player_name)
+            start_game(player_name,difficulty)
 
         def save_highest_score(score, player_name):
             with open('highest.csv', 'w') as file:
@@ -197,47 +200,49 @@ def main():
         
         top_button = CTkButton(root, text="", width=150, height=150,bg_color="transparent", fg_color="#65B741", corner_radius=100,
                         hover_color="#458230", command=lambda: button_clicked("Top"))
-        top_button.place(relx=0.5, rely=0.1, anchor="n")
+        top_button.place(relx=0.5, rely=0.18, anchor="n")
         top_button.configure(state="disabled")  
 
         left_button = CTkButton(root, text="", width=150, height=150,bg_color="transparent", fg_color="#BF3131", corner_radius=100,
                                 hover_color="#8C1F1F", command=lambda: button_clicked("Left"))
-        left_button.place(relx=0.1, rely=0.5, anchor="w")
+        left_button.place(relx=0.1, rely=0.58, anchor="w")
         left_button.configure(state="disabled")  
 
         bottom_button = CTkButton(root, text="", width=150, height=150,bg_color="transparent", fg_color="#FFFB73", corner_radius=100,
                                 hover_color="#CCC64C", command=lambda: button_clicked("Bottom"))
-        bottom_button.place(relx=0.5, rely=0.9, anchor="s")
+        bottom_button.place(relx=0.5, rely=0.98, anchor="s")
         bottom_button.configure(state="disabled")  
 
         right_button = CTkButton(root, text="", width=150, height=150,bg_color="transparent", fg_color="#4CB9E7", corner_radius=100,
                                 hover_color="#3384A5", command=lambda: button_clicked("Right"))
-        right_button.place(relx=0.9, rely=0.5, anchor="e")
+        right_button.place(relx=0.9, rely=0.58, anchor="e")
         right_button.configure(state="disabled")  
         # game_over()
 
         update_sequence()
         root.mainloop()
     home = CTk()
-    highest_score_label_hard=CTkLabel(home,text=f"\nHard - {highest_score_hard} by {highest_name_hard}",font=("Arial", 16) )
-    highest_score_label_hard.pack()
-    highest_score_label_medium=CTkLabel(home,text=f"Medium - {highest_score_medium} by {highest_name_medium}",font=("Arial", 16) )
-    highest_score_label_medium.pack()
-    highest_score_label_easy=CTkLabel(home,text=f"Easy - {highest_score_easy} by {highest_name_easy}",font=("Arial", 16) )
-    highest_score_label_easy.pack()
-    home.geometry("350x400+300+130")
+    highscore_label=CTkLabel(home,text="High Scores",font=("Arial", 20),text_color="#65B741")
+    highscore_label.place(relx=0.1,rely=0.01)
+    highest_score_label_hard=CTkLabel(home,text=f"Hard     -  {highest_score_hard}     by    {highest_name_hard}",font=("Arial", 16) )
+    highest_score_label_hard.place(relx=0.1,rely=0.1)
+    highest_score_label_medium=CTkLabel(home,text=f"Medium -  {highest_score_medium}    by    {highest_name_medium}",font=("Arial", 16) )
+    highest_score_label_medium.place(relx=0.1,rely=0.16) 
+    highest_score_label_easy=CTkLabel(home,text=f"Easy     -  {highest_score_easy}   by    {highest_name_easy}",font=("Arial", 16) )
+    highest_score_label_easy.place(relx=0.1,rely=0.22)
+    home.geometry("350x350+300+130")
     home.resizable(False,False)
     home.title("Color-Following-Game - Home")
 
     name_label = CTkLabel(home, text="Enter Your Name :   ",font=("Arial", 16) )
-    name_label.place(relx=0.3, rely=0.4, anchor="center")
+    name_label.place(relx=0.1, rely=0.4 )
     name_entry = CTkEntry(home)
-    name_entry.place(relx=0.7, rely=0.4, anchor="center")
+    name_entry.place(relx=0.5, rely=0.4)
 
-    difficulty_label = CTkLabel(home, text="Choose difficulty :   ",font=("Arial", 16) )
-    difficulty_label.place(relx=0.3, rely=0.5, anchor="center")
+    difficulty_label = CTkLabel(home, text="Choose difficulty  :   ",font=("Arial", 16) )
+    difficulty_label.place(relx=0.1, rely=0.5)
     difficulty_comboBox=CTkComboBox(home,values=["Easy","Medium","Hard"])
-    difficulty_comboBox.place(relx=0.7, rely=0.5, anchor="center")
+    difficulty_comboBox.place(relx=0.5, rely=0.5)
 
     start_button = CTkButton(home, text="Start", command=open_game)
     start_button.place(relx=0.5, rely=0.8, anchor="center")
