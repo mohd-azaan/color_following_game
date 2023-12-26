@@ -50,7 +50,11 @@ def main():
                     highest_score = score
                     highest_name = player_name
             else:
-                print("Incorrect sequence! Game over.")
+                pygame.mixer.init()
+                button_sound = pygame.mixer.Sound('game_over_sound2.mp3')
+                button_sound.set_volume(500)
+                button_sound.play() 
+                # print("Incorrect sequence! Game over.")
                 save_highest_score(highest_score, highest_name)
                 root.destroy()
                 game_over(highest_score, highest_name)
