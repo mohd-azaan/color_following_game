@@ -188,10 +188,10 @@ def main():
         def play_again(game_over_root,player_name):
             game_over_root.destroy()
             start_game(player_name,difficulty)
-
+        
         def save_highest_score(score, player_name):
             with open('highest.csv', 'w') as file:
-                file.write(f"{score},{player_name}")
+                file.write(f"{score},{player_name},{difficulty}")
                 # writer.writerow([score, player_name])
         
         sequence = []
