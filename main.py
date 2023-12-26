@@ -1,6 +1,7 @@
 from customtkinter import *
 import random
 import time
+import pygame.mixer
 
 label_font = ("Arial", 20) 
 def main():
@@ -27,14 +28,21 @@ def main():
         root.geometry("640x640+300+130")
         root.resizable(False,False)
         root.title("Color-Following-Game")
-
+        
+        # XXX 
+        
         def button_clicked(direction):
             check_sequence(direction)
+            
 
         def check_sequence(direction):
             nonlocal sequence_index, score, player_name,highest_score,highest_name
 
             if direction == sequence[sequence_index]:
+                pygame.mixer.init()
+                button_sound = pygame.mixer.Sound('button-sound-1-trimmed-1.mp3')
+                button_sound.set_volume(500)
+                button_sound.play() 
                 sequence_index += 1
                 score += 1
                 current_score_label.configure(text=f"Current Score : {player_name} {score}")
