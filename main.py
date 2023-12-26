@@ -95,28 +95,28 @@ def main():
                 if direction == "Top":
                     top_button.configure(fg_color="#FFFFFF")  # Change to white
                     root.update()
-                    root.after(1000)  # Show for 1 second
+                    root.after(800)  # Show for 1 second
                     top_button.configure(fg_color="#65B741")  # Revert to green
                     root.update()
                     root.after(500)  # Delay between button flashes
                 elif direction == "Left":
                     left_button.configure(fg_color="#FFFFFF")  # Change to white
                     root.update()
-                    root.after(1000)  # Show for 1 second
+                    root.after(800)  # Show for 1 second
                     left_button.configure(fg_color="#BF3131")  # Revert to red
                     root.update()
                     root.after(500)  # Delay between button flashes
                 elif direction == "Bottom":
                     bottom_button.configure(fg_color="#FFFFFF")  # Change to white
                     root.update()
-                    root.after(1000)  # Show for 1 second
+                    root.after(800)  # Show for 1 second
                     bottom_button.configure(fg_color="#FFFB73")  # Revert to yellow
                     root.update()
                     root.after(500)  # Delay between button flashes
                 elif direction == "Right":
                     right_button.configure(fg_color="#FFFFFF")  # Change to white
                     root.update()
-                    root.after(1000)  # Show for 1 second
+                    root.after(800)  # Show for 1 second
                     right_button.configure(fg_color="#4CB9E7")  # Revert to blue
                     root.update()
                     root.after(500)  # Delay between button flashes
@@ -146,13 +146,18 @@ def main():
             current_score_label.place(rely=0.2,relx=0.3)
             highest_score_label = CTkLabel(game_over_root, text=f"High Score: {highest_score} by {highest_name}", font=label_font)
             highest_score_label.pack(side="top",padx=8, pady=10, anchor="ne")
-            play_again_button=CTkButton(game_over_root,text="Play Again",font=label_font,command=lambda :call_main(game_over_root))
-            play_again_button.place(relx=0.5,rely=0.55,anchor=CENTER)
+            play_again_button=CTkButton(game_over_root,text="Play Again",font=label_font,command=lambda :play_again(game_over_root,player_name))
+            play_again_button.place(relx=0.66,rely=0.55,anchor=CENTER)
+            home_button=CTkButton(game_over_root,text="Home",font=label_font,command=lambda :call_main(game_over_root))
+            home_button.place(relx=0.33,rely=0.55,anchor=CENTER)
             game_over_root.mainloop()
 
         def call_main(game_over_root):
             game_over_root.destroy()
             main()
+        def play_again(game_over_root,player_name):
+            game_over_root.destroy()
+            start_game(player_name)
 
         def save_highest_score(score, player_name):
             with open('highest.csv', 'w') as file:
@@ -162,7 +167,7 @@ def main():
         sequence = []
         sequence_index = 0
         score = 0
-
+        
         top_button = CTkButton(root, text="", width=150, height=150,bg_color="transparent", fg_color="#65B741", corner_radius=100,
                         hover_color="#458230", command=lambda: button_clicked("Top"))
         top_button.place(relx=0.5, rely=0.1, anchor="n")
