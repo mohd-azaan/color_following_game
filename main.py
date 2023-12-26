@@ -8,17 +8,44 @@ def main():
     file = open ("highest.csv","r")
     highest=file.readlines()
     n=len(highest)-1
+    highest_name_easy=highest[0].split(",")[1].strip()
+    highest_score_easy=int(highest[0].split(",")[0])
+    highest_name_medium=highest[1].split(",")[1].strip()
+    highest_score_medium=int(highest[1].split(",")[0])
+    highest_name_hard=highest[2].split(",")[1].strip()
+    highest_score_hard=int(highest[2].split(",")[0])
+
     highest_name=highest[n].split(",")[1].strip()
     highest_score=int(highest[n].split(",")[0])
 
+
     def open_game():
         player_name = name_entry.get().title()
-        home.destroy()  
-        start_game(player_name)
+        difficulty = difficulty_comboBox.get()  # Get the selected difficulty level
+        home.destroy()
+        start_game(player_name, difficulty)
 
-    def start_game(player_name):
-        nonlocal highest_name,highest_score
 
+    def start_game(player_name,difficulty):
+        nonlocal highest_name,highest_score,n
+        print(n)
+        delay_bt_flash=0
+        delay_of_flash=0
+        if difficulty == "Easy":
+            delay_bt_flash=500
+            delay_of_flash=1000
+            n=0
+        elif difficulty == "Medium":
+            delay_bt_flash=300
+            delay_of_flash=600
+            n=1
+        elif difficulty == "Hard":
+            delay_bt_flash=100
+            delay_of_flash=350
+            n=2
+        highest_name=highest[n].split(",")[1].strip()
+        highest_score=int(highest[n].split(",")[0])
+        
         root = CTk()
 
         highest_score_label = CTkLabel(root, text=f"High Score: {highest_score} by {highest_name}", font=label_font)
@@ -95,31 +122,31 @@ def main():
                 if direction == "Top":
                     top_button.configure(fg_color="#FFFFFF")  # Change to white
                     root.update()
-                    root.after(800)  # Show for 1 second
+                    root.after(delay_of_flash)  # Show for 1 second
                     top_button.configure(fg_color="#65B741")  # Revert to green
                     root.update()
-                    root.after(500)  # Delay between button flashes
+                    root.after(delay_bt_flash)  # Delay between button flashes
                 elif direction == "Left":
                     left_button.configure(fg_color="#FFFFFF")  # Change to white
                     root.update()
-                    root.after(800)  # Show for 1 second
+                    root.after(delay_of_flash)  # Show for 1 second
                     left_button.configure(fg_color="#BF3131")  # Revert to red
                     root.update()
-                    root.after(500)  # Delay between button flashes
+                    root.after(delay_bt_flash)  # Delay between button flashes
                 elif direction == "Bottom":
                     bottom_button.configure(fg_color="#FFFFFF")  # Change to white
                     root.update()
-                    root.after(800)  # Show for 1 second
+                    root.after(delay_of_flash)  # Show for 1 second
                     bottom_button.configure(fg_color="#FFFB73")  # Revert to yellow
                     root.update()
-                    root.after(500)  # Delay between button flashes
+                    root.after(delay_bt_flash)  # Delay between button flashes
                 elif direction == "Right":
                     right_button.configure(fg_color="#FFFFFF")  # Change to white
                     root.update()
-                    root.after(800)  # Show for 1 second
+                    root.after(delay_of_flash)  # Show for 1 second
                     right_button.configure(fg_color="#4CB9E7")  # Revert to blue
                     root.update()
-                    root.after(500)  # Delay between button flashes
+                    root.after(delay_bt_flash)  # Delay between button flashes
 
             # After showing the sequence
             countdown_label = CTkLabel(root, text="Your turn", font=("Arial", 40))
@@ -192,20 +219,28 @@ def main():
         update_sequence()
         root.mainloop()
     home = CTk()
-    highest_score_label=CTkLabel(home,text=f"Highest Score : {highest_score} by {highest_name} ",font=("Arial", 16) )
-    highest_score_label.pack(pady=10)
-    home.geometry("350x300+300+130")
+    highest_score_label_hard=CTkLabel(home,text=f"\nHard - {highest_score_hard} by {highest_name_hard}",font=("Arial", 16) )
+    highest_score_label_hard.pack()
+    highest_score_label_medium=CTkLabel(home,text=f"Medium - {highest_score_medium} by {highest_name_medium}",font=("Arial", 16) )
+    highest_score_label_medium.pack()
+    highest_score_label_easy=CTkLabel(home,text=f"Easy - {highest_score_easy} by {highest_name_easy}",font=("Arial", 16) )
+    highest_score_label_easy.pack()
+    home.geometry("350x400+300+130")
     home.resizable(False,False)
     home.title("Color-Following-Game - Home")
 
     name_label = CTkLabel(home, text="Enter Your Name :   ",font=("Arial", 16) )
-    name_label.place(relx=0.3, rely=0.3, anchor="center")
-
+    name_label.place(relx=0.3, rely=0.4, anchor="center")
     name_entry = CTkEntry(home)
-    name_entry.place(relx=0.7, rely=0.3, anchor="center")
+    name_entry.place(relx=0.7, rely=0.4, anchor="center")
+
+    difficulty_label = CTkLabel(home, text="Choose difficulty :   ",font=("Arial", 16) )
+    difficulty_label.place(relx=0.3, rely=0.5, anchor="center")
+    difficulty_comboBox=CTkComboBox(home,values=["Easy","Medium","Hard"])
+    difficulty_comboBox.place(relx=0.7, rely=0.5, anchor="center")
 
     start_button = CTkButton(home, text="Start", command=open_game)
-    start_button.place(relx=0.5, rely=0.5, anchor="center")
+    start_button.place(relx=0.5, rely=0.8, anchor="center")
 
     home.mainloop()
 main()
