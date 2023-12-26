@@ -1,4 +1,3 @@
-from logging import root
 from customtkinter import *
 import random
 import time
