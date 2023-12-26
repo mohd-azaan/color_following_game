@@ -15,6 +15,8 @@ def main():
     highest_score_medium=int(highest[1].split(",")[0])
     highest_name_hard=highest[2].split(",")[1].strip()
     highest_score_hard=int(highest[2].split(",")[0])
+    highest_name_extreme=highest[3].split(",")[1].strip()
+    highest_score_extreme=int(highest[3].split(",")[0])
 
     highest_name=highest[n].split(",")[1].strip()
     highest_score=int(highest[n].split(",")[0])
@@ -44,6 +46,16 @@ def main():
             delay_bt_flash=100
             delay_of_flash=350
             n=2
+        elif difficulty == "Extreme":
+            delay_bt_flash=100
+            delay_of_flash=350
+            n=3
+        else :
+            difficulty="Easy"
+            delay_bt_flash=500
+            delay_of_flash=1000
+            n=0
+
         file= open("highest.csv","r")
         highest=file.readlines()
         highest_name=highest[n].split(",")[1].strip()
@@ -98,6 +110,8 @@ def main():
         def update_sequence():
             nonlocal sequence, sequence_index
             sequence.append(random.choice(["Top", "Left", "Bottom", "Right"]))
+            for i in range(n-1):
+                sequence.append(random.choice(["Top", "Left", "Bottom", "Right"]))
             sequence_index = 0
             # print("New sequence:", sequence)
             show_sequence()
@@ -230,26 +244,30 @@ def main():
         root.mainloop()
     home = CTk()
     highscore_label=CTkLabel(home,text="High Scores",font=("Arial", 20),text_color="#65B741")
-    highscore_label.place(relx=0.1,rely=0.01)
-    highest_score_label_hard=CTkLabel(home,text=f"Hard     -  {highest_score_hard}     by    {highest_name_hard}",font=("Arial", 16) )
-    highest_score_label_hard.place(relx=0.1,rely=0.1)
-    highest_score_label_medium=CTkLabel(home,text=f"Medium -  {highest_score_medium}    by    {highest_name_medium}",font=("Arial", 16) )
-    highest_score_label_medium.place(relx=0.1,rely=0.16) 
-    highest_score_label_easy=CTkLabel(home,text=f"Easy     -  {highest_score_easy}   by    {highest_name_easy}",font=("Arial", 16) )
-    highest_score_label_easy.place(relx=0.1,rely=0.22)
+    highscore_label.place(relx=0.1,rely=0.02)
+    highest_score_label_extreme=CTkLabel(home,text=f"Extreme      -   {highest_score_extreme}      {highest_name_extreme}",font=("Arial", 16) )
+    highest_score_label_extreme.place(relx=0.1,rely=0.1)
+    highest_score_label_hard=CTkLabel(home,text=f"Hard           -   {highest_score_hard}     {highest_name_hard}",font=("Arial", 16) )
+    highest_score_label_hard.place(relx=0.1,rely=0.16) 
+    highest_score_label_medium=CTkLabel(home,text=f"Medium      -   {highest_score_medium}     {highest_name_medium}",font=("Arial", 16) )
+    highest_score_label_medium.place(relx=0.1,rely=0.22)
+    highest_score_label_easy=CTkLabel(home,text=f"Easy           -   {highest_score_easy}     {highest_name_easy}",font=("Arial", 16) )
+    highest_score_label_easy.place(relx=0.1,rely=0.28)
+
     home.geometry("350x350+300+130")
     home.resizable(False,False)
     home.title("Color-Following-Game - Home")
 
     name_label = CTkLabel(home, text="Enter Your Name :   ",font=("Arial", 16) )
-    name_label.place(relx=0.1, rely=0.4 )
-    name_entry = CTkEntry(home)
-    name_entry.place(relx=0.5, rely=0.4)
+    name_label.place(relx=0.1, rely=0.5 )
+    name_entry = CTkComboBox(home,values=[highest_name_extreme,highest_name_hard,highest_name_medium,highest_name_easy])
+    name_entry.place(relx=0.5, rely=0.5)
+    name_entry.set("")
 
     difficulty_label = CTkLabel(home, text="Choose difficulty  :   ",font=("Arial", 16) )
-    difficulty_label.place(relx=0.1, rely=0.5)
-    difficulty_comboBox=CTkComboBox(home,values=["Easy","Medium","Hard"])
-    difficulty_comboBox.place(relx=0.5, rely=0.5)
+    difficulty_label.place(relx=0.1, rely=0.6)
+    difficulty_comboBox=CTkComboBox(home,values=["Easy","Medium","Hard","Extreme"])
+    difficulty_comboBox.place(relx=0.5, rely=0.6)
 
     start_button = CTkButton(home, text="Start", command=open_game)
     start_button.place(relx=0.5, rely=0.8, anchor="center")
