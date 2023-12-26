@@ -24,18 +24,17 @@ def main():
         highest_score_label = CTkLabel(root, text=f"High Score: {highest_score} by {highest_name}", font=label_font)
         highest_score_label.pack(side="top",padx=8, pady=10, anchor="ne")
         current_score_label = CTkLabel(root, text=f"Current Score: {player_name} {0}", font=("Arial", 20))
-        current_score_label.place(rely=0.02,relx=0.02)
+        current_score_label.place(rely=0.017,relx=0.02)
         root.geometry("640x640+300+130")
         root.resizable(False,False)
         root.title("Color-Following-Game")
 
         def button_clicked(direction):
-            print(f"Button {direction} clicked.")
             check_sequence(direction)
 
         def check_sequence(direction):
-            nonlocal sequence_index, score, player_name
-            nonlocal highest_score,highest_name
+            nonlocal sequence_index, score, player_name,highest_score,highest_name
+
             if direction == sequence[sequence_index]:
                 sequence_index += 1
                 score += 1
@@ -47,7 +46,7 @@ def main():
                 print("Incorrect sequence! Game over.")
                 save_highest_score(highest_score, highest_name)
                 root.destroy()
-                game_over()
+                game_over(highest_score, highest_name)
 
             if sequence_index == len(sequence):
                 update_sequence()
@@ -56,7 +55,7 @@ def main():
             nonlocal sequence, sequence_index
             sequence.append(random.choice(["Top", "Left", "Bottom", "Right"]))
             sequence_index = 0
-            print("New sequence:", sequence)
+            # print("New sequence:", sequence)
             show_sequence()
 
         def show_sequence():
@@ -125,16 +124,21 @@ def main():
             right_button.configure(state="normal")
             
 
-        def game_over():
+        def game_over(highest_score, highest_name):
+            nonlocal player_name,score
             game_over_root = CTk()
             game_over_root.geometry("640x640+300+130")
             game_over_root.resizable(False,False)
             game_over_label = CTkLabel(game_over_root, text="Game Over!", font=("Arial", 60))
             game_over_label.place(relx=0.5,rely=0.4,anchor=CENTER)
-
+            current_score_label = CTkLabel(game_over_root, text=f"You Scored: {player_name} {score}", font=("Arial", 20))
+            current_score_label.place(rely=0.2,relx=0.3)
+            highest_score_label = CTkLabel(game_over_root, text=f"High Score: {highest_score} by {highest_name}", font=label_font)
+            highest_score_label.pack(side="top",padx=8, pady=10, anchor="ne")
             play_again_button=CTkButton(game_over_root,text="Play Again",font=label_font,command=lambda :call_main(game_over_root))
             play_again_button.place(relx=0.5,rely=0.55,anchor=CENTER)
             game_over_root.mainloop()
+
         def call_main(game_over_root):
             game_over_root.destroy()
             main()
