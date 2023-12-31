@@ -1,25 +1,41 @@
 from customtkinter import *
 import random
 import time
+import mysql.connector
 import pygame.mixer
+
+mydb = mysql.connector.connect(
+        host='localhost',
+        user='root',
+        password='azaan123',
+        database='color_following_game'
+    )
+
+if mydb.is_connected():
+        print('Connected to MySQL database')
+
 
 label_font = ("Arial", 20) 
 def main():
-    file = open ("highest.csv","r")
-    highest=file.readlines()
-    file.close()
-    n=len(highest)-1
-    highest_name_easy=highest[0].split(",")[1].strip()
-    highest_score_easy=int(highest[0].split(",")[0])
-    highest_name_medium=highest[1].split(",")[1].strip()
-    highest_score_medium=int(highest[1].split(",")[0])
-    highest_name_hard=highest[2].split(",")[1].strip()
-    highest_score_hard=int(highest[2].split(",")[0])
-    highest_name_extreme=highest[3].split(",")[1].strip()
-    highest_score_extreme=int(highest[3].split(",")[0])
 
-    highest_name=highest[n].split(",")[1].strip()
-    highest_score=int(highest[n].split(",")[0])
+    mycursor = mydb.cursor()
+    mycursor . execute("select * from high_scores_table")
+    highest = mycursor.fetchall()
+    print(highest)
+
+    n=len(highest)-1
+    print(n)
+    highest_name_easy=highest[0][1]
+    highest_score_easy=int(highest[0][2])
+
+    highest_name_medium=highest[1][1]
+    highest_score_medium=int(highest[1][2])
+
+    highest_name_hard=highest[2][1]
+    highest_score_hard=int(highest[2][2])
+
+    highest_name_extreme=highest[3][1]
+    highest_score_extreme=int(highest[3][2])
 
 
     def open_game():
@@ -35,10 +51,8 @@ def main():
 
         start_game_after_validation()
 
-
-
     def start_game(player_name,difficulty):
-        nonlocal highest_name,highest_score,n
+        # nonlocal highest_name,highest_score,n
         # print(n)
         delay_bt_flash=0
         delay_of_flash=0
@@ -64,11 +78,21 @@ def main():
             delay_of_flash=1000
             n=0
 
-        file= open("highest.csv","r")
-        highest=file.readlines()
-        highest_name=highest[n].split(",")[1].strip()
-        highest_score=int(highest[n].split(",")[0])
-        file.close()
+
+         # Fetching highest scores based on difficulty from the database
+        
+        mycursor.execute("SELECT * FROM high_scores_table WHERE difficulty = %s", (difficulty,))
+        result = mycursor.fetchone()
+        print(result)
+
+        if result:
+            highest_score = result[2]
+            highest_name = result[1]
+            # print(f"Highest score for {difficulty}: {highest_score} by {highest_name}")
+        else:
+            print(f"No record found for {difficulty}")
+            highest_score = 0
+            highest_name = ""
         
         root = CTk()
 
@@ -89,7 +113,7 @@ def main():
             
 
         def check_sequence(direction):
-            nonlocal sequence_index, score, player_name,highest_score,highest_name
+            nonlocal sequence_index, score, player_name,highest_score,highest_name,difficulty
 
             if direction == sequence[sequence_index]:
                 pygame.mixer.init()
@@ -108,7 +132,8 @@ def main():
                 button_sound.set_volume(500)
                 button_sound.play() 
                 # print("Incorrect sequence! Game over.")
-                save_highest_score(highest_score, highest_name)
+                # print(difficulty)
+                save_highest_score(highest_score, highest_name,difficulty)
                 root.destroy()
                 game_over(highest_score, highest_name)
 
@@ -214,14 +239,25 @@ def main():
             game_over_root.destroy()
             start_game(player_name,difficulty)
 
-        def save_highest_score(score, player_name):
-            with open('highest.csv', 'w') as file:
-                for i,line in enumerate(highest):
-                    if i == n :
-                        file.write(f"{score},{player_name},{difficulty}\n")
-                    else :
-                        file.write(line)
-                
+        def save_highest_score(score, player_name, difficulty):
+            try:
+                mycursor = mydb.cursor()
+                mycursor.execute("SELECT * FROM high_scores_table WHERE difficulty = %s", (difficulty,))
+                result = mycursor.fetchone()
+
+                if result:  # If difficulty exists, check and update the high score and player name
+                    highest_score = result[2]
+
+                    if score > highest_score:
+                        mycursor.execute(f"UPDATE high_scores_table SET high_scores = {score}, name = {player_name} WHERE difficulty = {difficulty}")
+                        mydb.commit()
+
+                else:  # If difficulty doesn't exist, insert a new record
+                    mycursor.execute("INSERT INTO high_scores_table (difficulty, high_scores, name) VALUES (%s, %s, %s)", (difficulty, score, player_name))
+                    mydb.commit()
+
+            except mysql.connector.Error as e:
+                print(f"Error updating high score: {e}")
         
         sequence = []
         sequence_index = 0
@@ -246,19 +282,22 @@ def main():
                                 hover_color="#3384A5", command=lambda: button_clicked("Right"))
         right_button.place(relx=0.9, rely=0.58, anchor="e")
         right_button.configure(state="disabled")  
-        # game_over()
 
         update_sequence()
         root.mainloop()
     home = CTk()
     highscore_label=CTkLabel(home,text="High Scores",font=("Arial", 20),text_color="#65B741")
     highscore_label.place(relx=0.1,rely=0.02)
+
     highest_score_label_extreme=CTkLabel(home,text=f"Extreme      -   {highest_score_extreme}      {highest_name_extreme}",font=("Arial", 16) )
     highest_score_label_extreme.place(relx=0.1,rely=0.1)
+
     highest_score_label_hard=CTkLabel(home,text=f"Hard           -   {highest_score_hard}     {highest_name_hard}",font=("Arial", 16) )
     highest_score_label_hard.place(relx=0.1,rely=0.16) 
+
     highest_score_label_medium=CTkLabel(home,text=f"Medium      -   {highest_score_medium}     {highest_name_medium}",font=("Arial", 16) )
     highest_score_label_medium.place(relx=0.1,rely=0.22)
+
     highest_score_label_easy=CTkLabel(home,text=f"Easy           -   {highest_score_easy}     {highest_name_easy}",font=("Arial", 16) )
     highest_score_label_easy.place(relx=0.1,rely=0.28)
 
